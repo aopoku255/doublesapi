@@ -1,5 +1,6 @@
 const Admin = require("../models/Admin");
 const Events = require("../models/Events");
+const { uploadFile } = require("../upload");
 const { responseMessages } = require("../utils/request-status");
 
 async function createEvent(req, res) {
@@ -15,12 +16,19 @@ async function createEvent(req, res) {
       });
     }
 
+    // Upload images
+    const imageUploadPromises = req.files.map((file) =>
+      uploadFile(file, "events")
+    );
+    const images = await Promise.all(imageUploadPromises);
+
     // Create event
     const event = await Events.create({
       ...req.body,
       userId: adminId, // Map adminId to userId
       eventStartDate: new Date(eventStartDate),
       eventEndDate: new Date(eventEndDate),
+      eventImages: images,
     });
 
     if (event) {
@@ -47,4 +55,5 @@ async function getEvents(req, res) {
     data: events,
   });
 }
+
 module.exports = { createEvent, getEvents };

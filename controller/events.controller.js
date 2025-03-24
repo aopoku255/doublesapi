@@ -1,10 +1,16 @@
 const { createEvent, getEvents } = require("../services/events.service");
-
 const router = require("express").Router();
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const uploadMiddleware = multer({ storage: storage });
 
-router.post("/create-event", async (req, res) => {
-  return await createEvent(req, res);
-});
+router.post(
+  "/create-event",
+  uploadMiddleware.array("images", 10),
+  async (req, res) => {
+    return await createEvent(req, res);
+  }
+);
 
 router.get("/get-events", async (req, res) => {
   return await getEvents(req, res);
