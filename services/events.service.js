@@ -4,6 +4,7 @@ const { uploadFile } = require("../upload");
 const { responseMessages } = require("../utils/request-status");
 
 async function createEvent(req, res) {
+  console.log(req.file);
   try {
     const { eventStartDate, eventEndDate, adminId } = req.body;
 
@@ -17,10 +18,9 @@ async function createEvent(req, res) {
     }
 
     // Upload images
-    const imageUploadPromises = req.files.map((file) =>
-      uploadFile(file, "events")
-    );
-    const images = await Promise.all(imageUploadPromises);
+    const eventImage = await uploadFile(req.file, "events");
+
+    console.log(eventImage);
 
     // Create event
     const event = await Events.create({
@@ -28,7 +28,7 @@ async function createEvent(req, res) {
       userId: adminId, // Map adminId to userId
       eventStartDate: new Date(eventStartDate),
       eventEndDate: new Date(eventEndDate),
-      eventImages: images,
+      eventImages: eventImage,
     });
 
     if (event) {

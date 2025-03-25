@@ -50,8 +50,8 @@ const EventsSchema = new mongoose.Schema(
       default: "00:00",
     },
     eventImages: {
-      type: [String],
-      default: [],
+      type: String,
+      required: false,
     },
   },
   { timestamps: true }

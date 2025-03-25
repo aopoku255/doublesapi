@@ -6,7 +6,7 @@ const uploadMiddleware = multer({ storage: storage });
 
 router.post(
   "/create-event",
-  uploadMiddleware.array("images", 10),
+  uploadMiddleware.single("image"),
   async (req, res) => {
     return await createEvent(req, res);
   }
