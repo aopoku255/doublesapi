@@ -1,4 +1,5 @@
 const Admin = require("../models/Admin");
+const EventRegistration = require("../models/eventRegistration");
 const Events = require("../models/Events");
 const { uploadFile } = require("../upload");
 
@@ -59,6 +60,43 @@ async function createEvent(req, res) {
   }
 }
 
+async function registerEvents(req, res) {
+  const { userId, eventId } = req.body;
+
+  const event = await Events.findById(eventId);
+
+  if (!event) {
+    return res.status(404).json({
+      status: responseMessages["01"],
+      message: "Event not found",
+    });
+  }
+
+  // Check if the user is already registered for the event
+  const existingRegistration = await EventRegistration.findOne({
+    userId,
+    eventId,
+  });
+
+  if (existingRegistration) {
+    return res.status(409).json({
+      status: responseMessages["01"],
+      message: "User is already registered for this event",
+    });
+  }
+
+  const eventRegistrations = await EventRegistration.create({
+    userId,
+    eventId,
+  });
+
+  return res.status(201).json({
+    status: responseMessages["00"],
+    message: "Event registered successfully",
+    data: eventRegistrations,
+  });
+}
+
 async function getEvents(req, res) {
   const events = await Events.find();
 
@@ -86,4 +124,4 @@ async function getEventsById(req, res) {
   });
 }
 
-module.exports = { createEvent, getEvents, getEventsById };
+module.exports = { createEvent, getEvents, getEventsById, registerEvents };

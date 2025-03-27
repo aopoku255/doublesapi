@@ -12,6 +12,10 @@ const EventsSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    eventHost: {
+      type: String,
+      required: true,
+    },
     eventCategory: {
       type: String,
       required: true,
@@ -46,6 +50,10 @@ const EventsSchema = new mongoose.Schema(
       required: true,
     },
     eventStartTime: {
+      type: String,
+      default: "00:00",
+    },
+    eventEndTime: {
       type: String,
       default: "00:00",
     },

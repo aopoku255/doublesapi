@@ -2,6 +2,7 @@ const {
   createEvent,
   getEvents,
   getEventsById,
+  registerEvents,
 } = require("../services/events.service");
 const router = require("express").Router();
 const multer = require("multer");
@@ -18,6 +19,10 @@ router.post(
 
 router.get("/get-events", async (req, res) => {
   return await getEvents(req, res);
+});
+
+router.post("/register-events", async (req, res) => {
+  return await registerEvents(req, res);
 });
 
 router.get("/get-events/:id", async (req, res) => {
