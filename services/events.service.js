@@ -1,6 +1,7 @@
 const Admin = require("../models/Admin");
 const Events = require("../models/Events");
 const { uploadFile } = require("../upload");
+
 const { responseMessages } = require("../utils/request-status");
 
 async function createEvent(req, res) {
@@ -20,9 +21,20 @@ async function createEvent(req, res) {
     // Upload images
     const eventImage = await uploadFile(req.file, "events");
 
-    console.log(eventImage);
-
     // Create event
+    // Check if the same event information already exists
+    const existingEvent = await Events.findOne({
+      eventStartDate: new Date(eventStartDate),
+      eventEndDate: new Date(eventEndDate),
+      eventName: req.body.eventName, // Assuming eventName is part of the request body
+    });
+
+    if (existingEvent) {
+      return res.status(409).json({
+        status: responseMessages["01"], // Assuming "03" corresponds to conflict
+        message: "Event already exists",
+      });
+    }
     const event = await Events.create({
       ...req.body,
       userId: adminId, // Map adminId to userId
@@ -56,4 +68,22 @@ async function getEvents(req, res) {
   });
 }
 
-module.exports = { createEvent, getEvents };
+async function getEventsById(req, res) {
+  const { id } = req.params;
+
+  const event = await Events.findById(id);
+
+  if (!event) {
+    return res.status(404).json({
+      status: responseMessages["01"],
+      message: "Event not found",
+    });
+  }
+
+  return res.status(201).json({
+    status: responseMessages["00"],
+    data: event,
+  });
+}
+
+module.exports = { createEvent, getEvents, getEventsById };

@@ -1,4 +1,8 @@
-const { createEvent, getEvents } = require("../services/events.service");
+const {
+  createEvent,
+  getEvents,
+  getEventsById,
+} = require("../services/events.service");
 const router = require("express").Router();
 const multer = require("multer");
 const storage = multer.memoryStorage();
@@ -14,6 +18,10 @@ router.post(
 
 router.get("/get-events", async (req, res) => {
   return await getEvents(req, res);
+});
+
+router.get("/get-events/:id", async (req, res) => {
+  return await getEventsById(req, res);
 });
 
 module.exports = router;
