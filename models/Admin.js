@@ -1,41 +1,34 @@
-const { default: mongoose } = require("mongoose");
-
-const AdminSchema = new mongoose.Schema(
-  {
-    firstName: {
-      type: String,
-      required: true,
+"use strict";
+const { Model } = require("sequelize");
+module.exports = (sequelize, DataTypes) => {
+  class Admin extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+      Admin.hasMany(models.Event, { foreignKey: "adminId" });
+    }
+  }
+  Admin.init(
+    {
+      firstName: DataTypes.STRING,
+      lastName: DataTypes.STRING,
+      email: DataTypes.STRING,
+      password: DataTypes.STRING,
+      phone: DataTypes.STRING,
+      role: {
+        type: DataTypes.ENUM("SUPER", "ADMIN"),
+        defaultValue: "SUPER",
+        allowNull: false,
+      },
     },
-    lastName: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    phone: {
-      type: String,
-      required: false,
-    },
-    gender: {
-      type: String,
-      required: false,
-    },
-    companyLogo: {
-      type: String,
-      required: false,
-    },
-    companyName: {
-      type: String,
-      required: false,
-    },
-  },
-  { timestamps: true }
-);
-
-module.exports = mongoose.model("Admin", AdminSchema);
+    {
+      sequelize,
+      modelName: "Admin",
+    }
+  );
+  return Admin;
+};
