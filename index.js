@@ -7,7 +7,7 @@ const cors = require("cors");
 const app = express();
 
 // Cloud Run provides PORT as an environment variable
-const PORT = process.env.SERVERPORT || 3001;
+const PORT = process.env.SERVERPORT || 8080;
 
 app.use(morgan("short"));
 app.use(express.json());
