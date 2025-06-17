@@ -10,6 +10,7 @@ const welcome = require("../helpers/mail/welcome");
 const { generateOTP } = require("../helpers/generateOTP");
 const { sendSms } = require("../helpers/sendSMS");
 const userOtp = require("../helpers/mail/userOtp");
+const { Op } = require("sequelize");
 
 async function signup(req, res) {
   try {
