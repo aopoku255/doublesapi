@@ -1,0 +1,27 @@
+{
+  "development": {
+    "username": "root",
+    "password": null,
+    "database": "doubles",
+    "host": "34.55.57.226",
+    "dialect": "mysql",
+    "port": 3306
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "doubles",
+    "password": "Prof@0545",
+    "database": "doubles",
+    "host": "/cloudsql/doubles-462709a:us-central1:doubles",
+    "dialect": "mysql",
+    "dialectOptions": {
+      "socketPath": "/cloudsql/doubles-462709:us-central1:doubles"
+    }
+  }
+}
